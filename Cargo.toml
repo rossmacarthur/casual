@@ -1,6 +1,6 @@
 [package]
 name = "casual"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Ross MacArthur <ross@macarthur.io>"]
 edition = "2018"
 description = "Simple crate for parsing user input."
