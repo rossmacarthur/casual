@@ -239,7 +239,7 @@ pub fn input<T>() -> Input<T> {
 /// ```
 ///
 /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
-pub fn prompt<T, S>(text: S) -> Input<T>
+pub fn prompt<S, T>(text: S) -> Input<T>
 where
     S: Into<String>,
 {
@@ -261,8 +261,9 @@ pub fn confirm<S>(text: S) -> bool
 where
     S: AsRef<str>,
 {
-    let result: String = prompt(format!("{} [y/N] ", text.as_ref()))
-        .matches(|s: &String| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
+    let result = prompt(format!("{} [y/N] ", text.as_ref()))
+        .default("n".to_string())
+        .matches(|s| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
         .get();
     matches!(&*result.to_lowercase(), "y" | "yes")
 }
