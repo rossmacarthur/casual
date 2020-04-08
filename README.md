@@ -14,6 +14,9 @@ let username: String = prompt("Please enter your name: ").get();
 // implements `FromStr`.
 let age: u32 = prompt("Please enter your age: ").get();
 
+// `check(..)` can be used to validate the input data.
+let age: u32 = prompt("Please enter your age again: ").check(|x| *x < 120).get();
+
 // A convenience function `confirm` is provided for getting a yes or no answer.
 if !confirm("Are you sure you want to continue?") {
     panic!("Aborted!");
