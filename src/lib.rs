@@ -1,4 +1,6 @@
-//! Easily get user input.
+//! Simple crate for parsing user input.
+//!
+//! # Examples
 //!
 //! Rust type inference is used to know what to return.
 //!
@@ -13,21 +15,26 @@
 //! let age: u32 = casual::prompt("Please enter your age: ").get();
 //! ```
 //!
-//! `check(..)` can be used to validate the input data.
+//! [`.matches()`] can be used to validate the input data.
 //!
 //! ```
-//! let age: u32 = prompt("Please enter your age again: ").check(|x| *x < 120).get();
+//! let age: u32 = casual::prompt("Please enter your age again: ").matches(|x| *x < 120).get();
 //! ```
 //!
-//! A convenience function `confirm` is provided for getting a yes or no answer.
+//! A convenience function [`confirm`] is provided for getting a yes or no
+//! answer.
 //!
 //! ```
-//! if !casual::confirm("Are you sure you want to continue?") {
+//! if casual::confirm("Are you sure you want to continue?") {
+//!     // continue
+//! } else {
 //!     panic!("Aborted!");
 //! }
 //! ```
 //!
 //! [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+//! [`.matches()`]: struct.Input.html#method.matches
+//! [`confirm`]: fn.confirm.html
 
 use std::{
     fmt::{self, Debug, Display},
@@ -125,13 +132,13 @@ impl<T> Input<T> {
     /// # Examples
     ///
     /// ```
-    /// let num: u32 = Input::new().check(|x| *x != 10).get()
+    /// let num: u32 = Input::new().matches(|x| *x != 10).get()
     /// ```
-    pub fn check<F>(mut self, check: F) -> Self
+    pub fn matches<F>(mut self, matches: F) -> Self
     where
         F: Fn(&T) -> bool + 'static,
     {
-        self.validator = Some(Validator::new(check));
+        self.validator = Some(Validator::new(matches));
         self
     }
 }
@@ -193,10 +200,7 @@ where
     /// This function uses [`FromStr`] to parse the input data.
     ///
     /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
-    pub fn get(self) -> T
-    where
-        <T as FromStr>::Err: Display,
-    {
+    pub fn get(self) -> T {
         self.try_get().unwrap()
     }
 }
@@ -258,7 +262,7 @@ where
     S: AsRef<str>,
 {
     let result: String = prompt(format!("{} [y/N] ", text.as_ref()))
-        .check(|s: &String| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
+        .matches(|s: &String| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
         .get();
     matches!(&*result.to_lowercase(), "y" | "yes")
 }
