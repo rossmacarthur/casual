@@ -3,7 +3,10 @@ name = "casual"
 version = "0.1.0"
 authors = ["Ross MacArthur <ross@macarthur.io>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
+description = "Simple crate for parsing user input."
+readme = "README.md"
+homepage = "https://github.com/rossmacarthur/casual"
+repository = "https://github.com/rossmacarthur/casual"
+license = "MIT OR Apache-2.0"
+keywords = ["simple", "cli", "console", "text", "input"]
+categories =  ["command-line-interface", "rust-patterns"]
