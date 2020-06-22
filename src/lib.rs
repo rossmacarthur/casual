@@ -4,27 +4,27 @@
 //!
 //! Rust type inference is used to know what to return.
 //!
-//! ```
+//! ```ignore
 //! let username: String = casual::prompt("Please enter your name: ").get();
 //! ```
 //!
 //! [`FromStr`] is used to parse the input, so you can read any type that
 //! implements [`FromStr`].
 //!
-//! ```
+//! ```ignore
 //! let age: u32 = casual::prompt("Please enter your age: ").get();
 //! ```
 //!
 //! [`.matches()`] can be used to validate the input data.
 //!
-//! ```
+//! ```ignore
 //! let age: u32 = casual::prompt("Please enter your age again: ").matches(|x| *x < 120).get();
 //! ```
 //!
 //! A convenience function [`confirm`] is provided for getting a yes or no
 //! answer.
 //!
-//! ```
+//! ```ignore
 //! if casual::confirm("Are you sure you want to continue?") {
 //!     // continue
 //! } else {
@@ -131,7 +131,7 @@ impl<T> Input<T> {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```ignore
     /// let num: u32 = Input::new().matches(|x| *x != 10).get()
     /// ```
     pub fn matches<F>(mut self, matches: F) -> Self
@@ -215,7 +215,7 @@ where
 ///
 /// Read in something without any prompt.
 ///
-/// ```
+/// ```ignore
 /// let data: String = input().get();
 /// ```
 pub fn input<T>() -> Input<T> {
@@ -228,13 +228,13 @@ pub fn input<T>() -> Input<T> {
 ///
 /// Read in a simple string:
 ///
-/// ```
+/// ```ignore
 /// let username: String = prompt("Please enter your name: ").get();
 /// ```
 ///
 /// Types that implement [`FromStr`] will be automatically parsed.
 ///
-/// ```
+/// ```ignore
 /// let years = prompt("How many years have you been coding Rust: ").default(0).get();
 /// ```
 ///
@@ -250,7 +250,7 @@ where
 ///
 /// # Examples
 ///
-/// ```
+/// ```ignore
 /// if confirm("Are you sure you want to continue?") {
 ///     // continue
 /// } else {
