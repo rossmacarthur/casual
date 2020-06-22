@@ -203,6 +203,19 @@ where
     pub fn get(self) -> T {
         self.try_get().unwrap()
     }
+
+    /// Consumes the `Input` and checks the result.
+    ///
+    /// This function uses [`FromStr`] to parse the input data. The result is
+    /// then fed to the given closure.
+    ///
+    /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+    pub fn check<F>(self, check: F) -> bool
+    where
+        F: Fn(T) -> bool,
+    {
+        check(self.get())
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -261,9 +274,8 @@ pub fn confirm<S>(text: S) -> bool
 where
     S: AsRef<str>,
 {
-    let result = prompt(format!("{} [y/N] ", text.as_ref()))
+    prompt(format!("{} [y/N] ", text.as_ref()))
         .default("n".to_string())
         .matches(|s| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
-        .get();
-    matches!(&*result.to_lowercase(), "y" | "yes")
+        .check(|s| matches!(&*s.to_lowercase(), "y" | "yes"))
 }
