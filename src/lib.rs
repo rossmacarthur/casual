@@ -4,27 +4,27 @@
 //!
 //! Rust type inference is used to know what to return.
 //!
-//! ```ignore
+//! ```no_run
 //! let username: String = casual::prompt("Please enter your name: ").get();
 //! ```
 //!
 //! [`FromStr`] is used to parse the input, so you can read any type that
 //! implements [`FromStr`].
 //!
-//! ```ignore
+//! ```no_run
 //! let age: u32 = casual::prompt("Please enter your age: ").get();
 //! ```
 //!
 //! [`.matches()`] can be used to validate the input data.
 //!
-//! ```ignore
+//! ```no_run
 //! let age: u32 = casual::prompt("Please enter your age again: ").matches(|x| *x < 120).get();
 //! ```
 //!
 //! A convenience function [`confirm`] is provided for getting a yes or no
 //! answer.
 //!
-//! ```ignore
+//! ```no_run
 //! if casual::confirm("Are you sure you want to continue?") {
 //!     // continue
 //! } else {
@@ -131,8 +131,9 @@ impl<T> Input<T> {
     ///
     /// # Examples
     ///
-    /// ```ignore
-    /// let num: u32 = Input::new().matches(|x| *x != 10).get()
+    /// ```no_run
+    /// # use casual::Input;
+    /// let num: u32 = Input::new().matches(|x| *x != 10).get();
     /// ```
     pub fn matches<F>(mut self, matches: F) -> Self
     where
@@ -228,7 +229,8 @@ where
 ///
 /// Read in something without any prompt.
 ///
-/// ```ignore
+/// ```no_run
+/// # use casual::input;
 /// let data: String = input().get();
 /// ```
 pub fn input<T>() -> Input<T> {
@@ -241,13 +243,15 @@ pub fn input<T>() -> Input<T> {
 ///
 /// Read in a simple string:
 ///
-/// ```ignore
+/// ```no_run
+/// # use casual::prompt;
 /// let username: String = prompt("Please enter your name: ").get();
 /// ```
 ///
 /// Types that implement [`FromStr`] will be automatically parsed.
 ///
-/// ```ignore
+/// ```no_run
+/// # use casual::prompt;
 /// let years = prompt("How many years have you been coding Rust: ").default(0).get();
 /// ```
 ///
@@ -263,7 +267,8 @@ where
 ///
 /// # Examples
 ///
-/// ```ignore
+/// ```no_run
+/// # use casual::confirm;
 /// if confirm("Are you sure you want to continue?") {
 ///     // continue
 /// } else {
