@@ -229,6 +229,7 @@ where
         })
     }
 
+    #[inline]
     fn try_get(self) -> io::Result<T> {
         self.try_get_with(read_line)
     }
@@ -247,24 +248,22 @@ where
         self.try_get().unwrap()
     }
 
-    /// Consumes the `Input` and checks the result.
+    /// Consumes the `Input` and applies the given function to it.
     ///
     /// This function uses [`FromStr`] to parse the input data. The result is
     /// then fed to the given closure.
     ///
     /// ```no_run
     /// # use casual::Input;
-    /// let is_confirmed = Input::new()
-    ///     .prompt("Are you sure you want to continue? [yes/no] ")
-    ///     .check(|s: String| s == "yes");
+    /// let value = Input::new().map(|s: String| &s.to_lowercase() == "yes");
     /// ```
     ///
     /// [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
-    pub fn check<F>(self, check: F) -> bool
+    pub fn map<F, U>(self, map: F) -> U
     where
-        F: Fn(T) -> bool,
+        F: Fn(T) -> U,
     {
-        check(self.get())
+        map(self.get())
     }
 }
 
@@ -331,5 +330,5 @@ pub fn confirm<S: Into<String>>(text: S) -> bool {
         .suffix(" [y/N] ")
         .default("n".to_string())
         .matches(|s| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
-        .check(|s| matches!(&*s.to_lowercase(), "y" | "yes"))
+        .map(|s| matches!(&*s.to_lowercase(), "y" | "yes"))
 }
