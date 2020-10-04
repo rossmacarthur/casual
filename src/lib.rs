@@ -18,7 +18,9 @@
 //! [`.matches()`] can be used to validate the input data.
 //!
 //! ```no_run
-//! let age: u32 = casual::prompt("Please enter your age again: ").matches(|x| *x < 120).get();
+//! let age: u32 = casual::prompt("Please enter your age again: ")
+//!     .matches(|x| *x < 120)
+//!     .get();
 //! ```
 //!
 //! A convenience function [`confirm`] is provided for getting a yes or no
@@ -36,11 +38,9 @@
 //! [`.matches()`]: struct.Input.html#method.matches
 //! [`confirm`]: fn.confirm.html
 
-use std::{
-    fmt::{self, Debug, Display},
-    io::{self, Write},
-    str::FromStr,
-};
+use std::fmt::{self, Debug, Display};
+use std::io::{self, Write};
+use std::str::FromStr;
 
 /////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -77,12 +77,6 @@ impl<T> Validator<T> {
     }
 }
 
-impl<T> Default for Input<T> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl<T> Debug for Input<T>
 where
     T: Debug,
@@ -96,8 +90,19 @@ where
     }
 }
 
+impl<T> Default for Input<T> {
+    /// Construct a new empty `Input`.
+    ///
+    /// Identical to [`Input::new()`](struct.Input.html#method.new).
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> Input<T> {
     /// Construct a new empty `Input`.
+    ///
+    /// Identical to [`Input::default()`](struct.Input.html#impl-Default).
     pub fn new() -> Self {
         Self {
             prompt: None,
@@ -200,6 +205,11 @@ where
     ///
     /// This function uses [`FromStr`] to parse the input data.
     ///
+    /// ```no_run
+    /// # use casual::Input;
+    /// let num: u32 = Input::new().prompt("Enter a number: ").get();
+    /// ```
+    ///
     /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
     pub fn get(self) -> T {
         self.try_get().unwrap()
@@ -209,6 +219,13 @@ where
     ///
     /// This function uses [`FromStr`] to parse the input data. The result is
     /// then fed to the given closure.
+    ///
+    /// ```no_run
+    /// # use casual::Input;
+    /// let is_confirmed = Input::new()
+    ///     .prompt("Are you sure you want to continue? [yes/no] ")
+    ///     .check(|s: String| s == "yes");
+    /// ```
     ///
     /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
     pub fn check<F>(self, check: F) -> bool
@@ -252,7 +269,9 @@ pub fn input<T>() -> Input<T> {
 ///
 /// ```no_run
 /// # use casual::prompt;
-/// let years = prompt("How many years have you been coding Rust: ").default(0).get();
+/// let years = prompt("How many years have you been coding Rust: ")
+///     .default(0)
+///     .get();
 /// ```
 ///
 /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
