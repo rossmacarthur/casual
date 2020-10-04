@@ -54,6 +54,8 @@ struct Validator<T> {
 /// An input builder.
 pub struct Input<T> {
     prompt: Option<String>,
+    prefix: Option<String>,
+    suffix: Option<String>,
     default: Option<T>,
     validator: Option<Validator<T>>,
 }
@@ -77,16 +79,15 @@ impl<T> Validator<T> {
     }
 }
 
-impl<T> Debug for Input<T>
-where
-    T: Debug,
-{
+impl<T: Debug> Debug for Input<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Input")
+            .field("prefix", &self.prefix)
             .field("prompt", &self.prompt)
+            .field("suffix", &self.suffix)
             .field("default", &self.default)
-            .finish() // FIXME: use .finish_non_exhaustive() when it's
-                      // stabilized
+            .finish() // FIXME rust-lang/rust#67364:
+                      // use .finish_non_exhaustive() when it's stabilized
     }
 }
 
@@ -105,18 +106,29 @@ impl<T> Input<T> {
     /// Identical to [`Input::default()`](struct.Input.html#impl-Default).
     pub fn new() -> Self {
         Self {
+            prefix: None,
             prompt: None,
+            suffix: None,
             default: None,
             validator: None,
         }
     }
 
     /// Set the prompt to display before waiting for user input.
-    pub fn prompt<S>(mut self, prompt: S) -> Self
-    where
-        S: Into<String>,
-    {
+    pub fn prompt<S: Into<String>>(mut self, prompt: S) -> Self {
         self.prompt = Some(prompt.into());
+        self
+    }
+
+    /// Set the prompt prefix.
+    pub fn prefix<S: Into<String>>(mut self, prefix: S) -> Self {
+        self.prefix = Some(prefix.into());
+        self
+    }
+
+    /// Set the prompt suffix.
+    pub fn suffix<S: Into<String>>(mut self, suffix: S) -> Self {
+        self.suffix = Some(suffix.into());
         self
     }
 
@@ -169,10 +181,30 @@ where
     where
         F: Fn(&Option<String>) -> io::Result<String>,
     {
+        let Self {
+            prompt,
+            prefix,
+            suffix,
+            default,
+            validator,
+        } = self;
+
+        let prompt = prompt.map(move |prompt| {
+            let mut p = String::new();
+            if let Some(prefix) = prefix {
+                p.push_str(&prefix);
+            }
+            p.push_str(&prompt);
+            if let Some(suffix) = suffix {
+                p.push_str(&suffix);
+            }
+            p
+        });
+
         Ok(loop {
-            match read_line(&self.prompt)?.trim() {
+            match read_line(&prompt)?.trim() {
                 "" => {
-                    if let Some(default) = self.default {
+                    if let Some(default) = default {
                         break default;
                     } else {
                         continue;
@@ -180,7 +212,7 @@ where
                 }
                 raw => match raw.parse() {
                     Ok(result) => {
-                        if let Some(validator) = &self.validator {
+                        if let Some(validator) = &validator {
                             if !validator.run(&result) {
                                 println!("Error: invalid input");
                                 continue;
@@ -294,11 +326,9 @@ where
 ///     panic!("Aborted!");
 /// }
 /// ```
-pub fn confirm<S>(text: S) -> bool
-where
-    S: AsRef<str>,
-{
-    prompt(format!("{} [y/N] ", text.as_ref()))
+pub fn confirm<S: Into<String>>(text: S) -> bool {
+    prompt(text)
+        .suffix(" [y/N] ")
         .default("n".to_string())
         .matches(|s| matches!(&*s.trim().to_lowercase(), "n" | "no" | "y" | "yes"))
         .check(|s| matches!(&*s.to_lowercase(), "y" | "yes"))
