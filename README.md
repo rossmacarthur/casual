@@ -46,7 +46,7 @@ if casual::confirm("Are you sure you want to continue?") {
 }
 ```
 
-[`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+[`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
 [`.matches()`]: https://docs.rs/casual/0.1/casual/struct.Input.html#method.matches
 [`confirm`]: https://docs.rs/casual/0.1/casual/fn.confirm.html
 

@@ -34,7 +34,7 @@
 //! }
 //! ```
 //!
-//! [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+//! [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
 //! [`.matches()`]: struct.Input.html#method.matches
 //! [`confirm`]: fn.confirm.html
 
@@ -242,7 +242,7 @@ where
     /// let num: u32 = Input::new().prompt("Enter a number: ").get();
     /// ```
     ///
-    /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+    /// [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
     pub fn get(self) -> T {
         self.try_get().unwrap()
     }
@@ -259,7 +259,7 @@ where
     ///     .check(|s: String| s == "yes");
     /// ```
     ///
-    /// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+    /// [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
     pub fn check<F>(self, check: F) -> bool
     where
         F: Fn(T) -> bool,
@@ -306,7 +306,7 @@ pub fn input<T>() -> Input<T> {
 ///     .get();
 /// ```
 ///
-/// [`FromStr`]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+/// [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
 pub fn prompt<S, T>(text: S) -> Input<T>
 where
     S: Into<String>,
