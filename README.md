@@ -1,5 +1,9 @@
 # casual
 
+[![Crates.io Version](https://img.shields.io/crates/v/casual.svg)](https://crates.io/crates/casual)
+[![Docs.rs Latest](https://img.shields.io/badge/docs.rs-latest-blue.svg)](https://docs.rs/casual)
+[![Build Status](https://img.shields.io/github/workflow/status/rossmacarthur/casual/build/master)](https://github.com/rossmacarthur/casual/actions?query=workflow%3Abuild)
+
 Simple crate for parsing user input.
 
 ## Getting started
