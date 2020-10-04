@@ -12,7 +12,7 @@ Add the following dependency to your `Cargo.toml`.
 
 ```toml
 [dependencies]
-casual = "0.1"
+casual = "0.2"
 ```
 
 ## Usage
@@ -47,8 +47,8 @@ if casual::confirm("Are you sure you want to continue?") {
 ```
 
 [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
-[`.matches()`]: https://docs.rs/casual/0.1/casual/struct.Input.html#method.matches
-[`confirm`]: https://docs.rs/casual/0.1/casual/fn.confirm.html
+[`.matches()`]: https://docs.rs/casual/0.2/casual/struct.Input.html#method.matches
+[`confirm`]: https://docs.rs/casual/0.2/casual/fn.confirm.html
 
 ## License
 
