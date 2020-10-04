@@ -38,7 +38,8 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Check tag against package version
-      run: grep '^version = ' Cargo.toml | grep -q "${GITHUB_REF#refs/tags/}"
+      run: |
+        [ "${GITHUB_REF#refs/tags/}" = "$(grep 'version' Cargo.toml | awk -F'"' '{print $2}')" ]
 
     - uses: actions-rs/toolchain@v1
       with:
